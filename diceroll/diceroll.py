@@ -1,84 +1,71 @@
 from random import randint
-import sys, math
+import sys
 
-# Make a little title bar thing
-print('''
-            -=-=-=-=-=-=-=-=-=-=-=-
-            DundTools DiceRoll v0.1
-            -=-=-=-=-=-=-=-=-=-=-=-
-Dungeons & Dragons (or general, really) Dice Roller
+# Take the command line argument for what the user wants to roll
+rollChoice = str(sys.argv[1])
 
-        More info is available on Github
+# Help argument
+if rollChoice == 'help' or '':
+    print("\nEnter the amount of dice you'd like to roll, the letter 'd', the number of sides of the die, and +/- a number to add a modifier.\n\nEx: 3d6+5")
+    sys.exit()
+else:
+    print('You entered: ' + rollChoice)
 
-    https://github.com/foreverbostick/DundTools
+# Find the 'd' in the input
+dIndex = rollChoice.find('d')
+if dIndex == -1:
+    raise Exception('Missing the "d" character. Enter "diceroll help" for instructions.')
 
-  Type 'QUIT' at any time to close the application
-''')
+# Find the number of dice to roll
+diceNum = rollChoice[:dIndex]
+if not diceNum.isdecimal():
+    raise Exception('Missing the number of dice. Enter "diceroll help" for instructions.')
+diceNum = int(diceNum)
 
-while True:                     # Main loop
-    try:
-        
-        # Gather all the information we need from the user
-        diceType = input('What kind of dice are you wanting to roll?\n\n> ')
-        if diceType.upper() == 'QUIT':
-            print('\nThanks for playing!\n')
-            sys.exit()
+# See if there's a modifier to add/subtract
+modIndex = rollChoice.find('+')
+if modIndex == -1:
+    modIndex = rollChoice.find('-')
 
-        diceNum = input('How many dice do you want to roll?\n\n> ')
-        if diceNum.upper() == 'QUIT':
-            print('\nThanks for playing!\n')
-            sys.exit()
-        
-        diceMod = input('Any modifiers?\n(Ex - +5 or -1. Leave blank for 0)\n\n> ')
+# Find the type of dice to roll
+if modIndex == -1:
+    diceType = rollChoice[dIndex + 1 :]
+else:
+    diceType = rollChoice[dIndex + 1 : modIndex]
+if not diceType.isdecimal():
+    raise Exception('Missing type of dice. Enter "diceroll help" for instructions.')
+diceType = int(diceType)
 
-        if diceMod == '' or '+0' or '-0':
-            diceMod = '+0'
-        if diceMod.upper() == 'QUIT':
-            print('\nThanks for playing!\n')
-            sys.exit()
-        
-        # Combine all the inputs into a single string
-        diceRoll = diceNum + 'd' + diceType + diceMod
+if modIndex == -1:
+    diceMod = 0
+else:
+    diceMod = int(rollChoice[modIndex + 1 :])
+    if rollChoice[modIndex] == '-':
+        # Switch to negative to subtract
+        diceMod = -diceMod
 
-        # Find the d and +/- in the string, to make organizing easier
-        dIndex = diceRoll.find('d')
-        modIndex = diceRoll.find('+')
-        if modIndex == -1:
-            modIndex = diceRoll.find('-')
+# Do the math
+rolls = []
+for i in range(diceNum):
+    rollResult = randint(1, diceType)
+    rolls.append(rollResult)
 
-        # Do the actual math
-        rolls = []
-        for i in range(diceNum):
-            rollResult = randint(1, diceType)
-            rolls.append(rollResult)
+# Display the total
+print('\nTotal: ', sum(rolls) + diceMod, '\n(Each die: ', end='')
 
-        diceConfirm = input('\nYou said you wanted to roll ' + diceNum + 'd' + diceType + diceMod + '. Does this look correct? (Y/N)\n\n> ')
-        if diceConfirm.upper() == 'QUIT':
-            print('\nThanks for playing!\n')
-            sys.exit()
-        # I'm sure there's a better way to get confirmation,
-        # but this works as a placeholder
+# Show individual rolls
+for i, roll in enumerate(rolls):
+    rolls[i] = str(roll)
+print(', '.join(rolls), end='')
 
-        # Convert diceNum and diceMod string to int so we can do math
-        diceNum = diceRoll[:dIndex]
-        diceNum = int(diceNum)
-        diceMod = diceRoll[modIndex:]
-        diceMod = int(diceMod)
+# Display mod amount
+if diceMod != 0:
+    modSign = rollChoice[modIndex]
+    print(', {}{}'.format(modSign, abs(diceMod)), end='')
+print(')')
 
-        # Show the total
-        print('Total: ', sum(rolls) + diceMod, '(Each Die: ', end='')
-
-        # Show the individual rolls
-        for i, roll in enumerate(rolls):
-            rolls[i] = str(roll)
-        print(', '.join(rolls), end='')
-
-        # Display the modifier amount
-        if diceMod != 0:
-            modSign = diceRoll[modIndex]
-            print(', {}{}'.format(modSign, abs(diceMod)), end='')
-        print(')')
-
-    except Exception as exc:
-        print('Error! Here\'s what happened: ' + str(exc))
-        continue
+# Call out natural 20s and 1s
+if rolls[i] == '20' and diceType == 20:
+    print('\nNat 20!')
+if rolls[i] == '1' and diceType == 20:
+    print('\nOh no! Nat 1 :(')
