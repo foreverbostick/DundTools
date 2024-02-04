@@ -3,7 +3,8 @@
 #
 
 # Import race stat mods
-from race import * as r
+import race as r
+
 
 # Check to see if race selection has been made, and if not, print a message
 def raceCheck():
@@ -12,6 +13,7 @@ def raceCheck():
         while True:
             if gotoRace.lower == 'yes' or 'y':
                 r.chooseRace()
+                break
             else:
                 print('Goodbye!')
                 break
@@ -31,4 +33,13 @@ class Mods:
               '\nCon:', self.conMod, '\nInt:', self.intMod,
               '\nWis:', self.wisMod, '\nCha:', self.chaMod, '\n')
 
-stats = Mods(0, 0, 0, 0, 0, 0)
+statMods = Mods(0, 0, 0, 0, 0, 0)
+
+def addMods():
+    global statMods
+    statMods = Mods(statMods.strMod + r.finalPick.strAdd,
+                    statMods.dexMod + r.finalPick.dexAdd,
+                    statMods.conMod + r.finalPick.conAdd,
+                    statMods.intMod + r.finalPick.intAdd,
+                    statMods.wisMod + r.finalPick.wisAdd,
+                    statMods.chaMod + r.finalPick.chaAdd)
