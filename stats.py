@@ -7,6 +7,7 @@ import race as r
 
 
 # Check to see if race selection has been made, and if not, print a message
+# and run chooseRace.
 def raceCheck():
     if r.finalPick == '' or False:
         gotoRace = input('You need to select a race first. Run the race module now? y/n\n--> ')
@@ -46,7 +47,18 @@ class Mods:
               '\nWis:', self.wisMod, '\nCha:', self.chaMod, '\n')
 
 statMods = Mods(0, 0, 0, 0, 0, 0)
+
 #
+# Looks good and doesn't hurt anything, but it also doesn't *do*
+# anything yet.
+#
+# I'll probably change it around to add proficiency bonuses or
+# something similar later on. Or maybe use it to update stats
+# when leveling up.
+#
+# For now, it'll just stay commented out.
+#
+
 #def addMods():
 #    global statMods
 #    statMods = Mods(statMods.strMod + r.finalPick.strAdd,
@@ -59,4 +71,3 @@ statMods = Mods(0, 0, 0, 0, 0, 0)
 
 if __name__ == "__main__":
     raceCheck()
-    addMods()
