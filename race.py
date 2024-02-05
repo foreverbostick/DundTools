@@ -15,7 +15,6 @@ stats = ["Str", "Dex", "Con", "Int", "Wis", "Cha"]
 def chooseRace():
     global raceChoice
     global raceIndex
-    global r8
     global finalPick
 
     print("Choose from the following races (enter the number):\n")
@@ -115,6 +114,8 @@ def vhPlus():
     global plusChoice2
     global r13
     global finalPick
+    plusChoice1 = 0
+    plusChoice2 = 0
     vhStats = [r13.strAdd, r13.dexAdd, r13.conAdd, r13.intAdd, r13.wisAdd, r13.chaAdd]
 
     print('Choose a stat to add +1 to (enter the number)')
