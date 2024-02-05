@@ -17,6 +17,18 @@ def raceCheck():
             else:
                 print('Goodbye!')
                 break
+    elif r.finalPick != '' or False:
+        gotoRace = input("You've already selected a race: " + r.raceChoice + ". Would you like to choose another?\n\n--> ")
+        while True:
+            if gotoRace.lower == 'yes' or 'y':
+                r.finalPick = ''
+                r.chooseRace()
+                break
+            else:
+                print('Sounds good to me!')
+                break
+
+        
 
 class Mods:
 
@@ -34,12 +46,17 @@ class Mods:
               '\nWis:', self.wisMod, '\nCha:', self.chaMod, '\n')
 
 statMods = Mods(0, 0, 0, 0, 0, 0)
+#
+#def addMods():
+#    global statMods
+#    statMods = Mods(statMods.strMod + r.finalPick.strAdd,
+#                    statMods.dexMod + r.finalPick.dexAdd,
+#                    statMods.conMod + r.finalPick.conAdd,
+#                    statMods.intMod + r.finalPick.intAdd,
+#                    statMods.wisMod + r.finalPick.wisAdd,
+#                    statMods.chaMod + r.finalPick.chaAdd)
 
-def addMods():
-    global statMods
-    statMods = Mods(statMods.strMod + r.finalPick.strAdd,
-                    statMods.dexMod + r.finalPick.dexAdd,
-                    statMods.conMod + r.finalPick.conAdd,
-                    statMods.intMod + r.finalPick.intAdd,
-                    statMods.wisMod + r.finalPick.wisAdd,
-                    statMods.chaMod + r.finalPick.chaAdd)
+
+if __name__ == "__main__":
+    raceCheck()
+    addMods()
